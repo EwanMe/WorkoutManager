@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "iosfwd": "cpp",
+        "utility": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "xstring": "cpp",
+        "vector": "cpp",
+        "cstddef": "cpp",
+        "chrono": "cpp",
+        "map": "cpp",
+        "xtree": "cpp",
+        "ios": "cpp",
+        "regex": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "random": "cpp",
+        "string": "cpp"
+    }
+}

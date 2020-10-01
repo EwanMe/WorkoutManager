@@ -283,18 +283,18 @@ void WorkoutManager::updateGraphs(const bool state) {
         set<Workout> selectedWorkouts;
         
         // Reference point to determine last month, last three months etc.
-        auto last = loadedWorkouts.rbegin()->getDate();
-        auto lastMonth = stoi(date::format("%m", last.month()));
-        auto lastYear = stoi(date::format("%y", last.year()));
+        auto lastDate = loadedWorkouts.rbegin()->getDate();
+        int lastMonth = stoi(date::format("%m", lastDate.month()));
+        int lastYear = stoi(date::format("%y", lastDate.year()));
 
         double x_scaler {0}; // Scales x_coord further down the line.
         bool firstIt {true}; // Used for setting x_scaler only on first iteration.
 
         // Search through all loaded workouts, selcting the specified ones.
         for (Workout w : loadedWorkouts) {
-            constexpr int monthLength {31}; // Temp. value, will always be long enough.
-            auto monthNum = stoi(date::format("%m", w.getDate().month()));
-            auto yearNum = stoi(date::format("%y", w.getDate().year()));
+            constexpr int monthLength {31}; // Temp. value that will always be long enough.
+            int monthNum = stoi(date::format("%m", w.getDate().month()));
+            int yearNum = stoi(date::format("%y", w.getDate().year()));
 
             switch (viewState) {
                 

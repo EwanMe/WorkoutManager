@@ -50,10 +50,10 @@ private:
     static constexpr int fieldPad {static_cast<int>(pad*1.5)};
 
     // Graph placement.
-    static constexpr int graph_x {pad};
-    int graph_y {y_max()-pad};
-    int x_length {x_max()-pad*4};
-    int y_length {y_max()-pad*2};
+    static constexpr int graph_x {pad}; // Location of x=0.
+    int graph_y {y_max()-pad}; // Location of y=0.
+    int x_length {x_max()-pad*4}; // X-axis length.
+    int y_length {y_max()-pad*2}; // Y-axis length.
 
     const string filename {"workouts.csv"};
     bool isForm {true}; // Consider making this an argument to the switchPage() function instead.
@@ -109,9 +109,11 @@ public:
     void saveWorkout();
     void loadWorkouts();
 
-    void displayWorkouts(); // On the form page.
+    void displayWorkouts(); // Display to the form page.
 
-    void switchPage(); // Between form page and graphs page.
-    void updateGraphs(const bool state); // state indicates whether graphs should be attached or detached.
+    void switchPage(); // Switch between form page and graphs page.
+    void updateGraphs(const bool state); // State indicates whether graphs should be attached or detached.
+    void detachGraphs();
+    void scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler);
     void cycleView();
 };

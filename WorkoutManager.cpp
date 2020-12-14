@@ -283,8 +283,77 @@ void WorkoutManager::updateGraphs(const bool state) {
         // Need to make a selection of workouts to draw graphs from
         // based on what view type the cycleView() function has selected.
         set<Workout> selectedWorkouts;
+<<<<<<< HEAD
         double x_scaler {0};    // Scales x_coord further down the line.
         scaleXaxis(selectedWorkouts, x_scaler);
+=======
+        
+        // Reference point to determine last month, last three months etc.
+        auto lastDate = loadedWorkouts.rbegin()->getDate();
+        int lastMonth = stoi(date::format("%m", lastDate.month()));
+        int lastYear = stoi(date::format("%y", lastDate.year()));
+
+        double x_scaler {0}; // Scales x_coord further down the line.
+        bool firstIt {true}; // Used for setting x_scaler only on first iteration.
+
+        // Search through all loaded workouts, selcting the specified ones.
+        for (Workout w : loadedWorkouts) {
+            constexpr int monthLength {31}; // Temp. value that will always be long enough.
+            int monthNum = stoi(date::format("%m", w.getDate().month()));
+            int yearNum = stoi(date::format("%y", w.getDate().year()));
+
+            switch (viewState) {
+                
+                // TODO: Rework the entire draw functionality.
+                // Need to use days and months to plot graph such that it has high resolution.
+                // Iterate through each day in each month.
+                
+                case GraphView::last_month:
+
+                    if (monthNum == lastMonth) {
+                        selectedWorkouts.insert(w);
+                    }
+                    if (firstIt) {
+                        x_scaler = (x_length/monthLength);
+                        firstIt = false;
+                    }
+                    break;
+
+                case GraphView::last_three_months:
+
+                    if (monthNum == lastMonth || monthNum == lastMonth-1 || monthNum == lastMonth-2) {
+                        selectedWorkouts.insert(w);
+                    }
+                    if (firstIt) {
+                        x_scaler = (x_length/(monthLength*3));
+                        firstIt = false;
+                    }
+                    break;
+
+                case GraphView::last_six_months:
+
+                    if (monthNum == lastMonth || monthNum == lastMonth-1 || monthNum == lastMonth-2 || monthNum == lastMonth-3 || monthNum == lastMonth-4 || monthNum == lastMonth-5) {
+                        selectedWorkouts.insert(w);
+                    }
+                    if (firstIt) {
+                        x_scaler = (x_length/(monthLength*6));
+                        firstIt = false;
+                    }
+                    break;
+
+                case GraphView::last_year:
+
+                    if (yearNum == lastYear) {
+                        selectedWorkouts.insert(w);
+                    }
+                    if (firstIt) {
+                        x_scaler = (x_length/(monthLength*12));
+                        firstIt = false;
+                    }
+                    break;
+            }
+        }
+>>>>>>> 75092e7e3105cdfce7c48c86b5265712e100b22c
 
         int i {0}; // Iterator used to pick new Color for each unique graph.
         for (Workout w : selectedWorkouts) {

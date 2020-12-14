@@ -10,27 +10,6 @@
 using namespace std;
 using namespace Graph_lib;
 
-// class Open_polyline_movable : public Open_polyline {
-// public:
-//     Open_polyline_movable() : Open_polyline() {}
-
-//     Open_polyline_movable(const Open_polyline_movable& other) {
-
-//         for (auto p : other.points) {
-//             this->add(p);
-//         }
-
-//         set_color(other.lcolor);
-//         set_style(other.ls);
-//         set_fill_color(other.fcolor);
-
-//     }
-
-//     Open_polyline_movable& operator=(const Open_polyline_movable& rhs) {
-//         return *this;
-//     }
-// };
-
 class WorkoutManager : public Window {
 
 private:

@@ -96,7 +96,7 @@ void WorkoutManager::saveWorkout() {
         ofstream ofstr {filename, ios_base::app}; // Appending to file - can store muliple workouts.
         
         if (!ofstr) {
-            throw "Can't write to file " + filename; // -- NO CATCH! --
+            throw std::runtime_error("Can't write to file " + filename); // -- NO CATCH! --
         }
 
         Workout w {date, currentWorkout};
@@ -115,7 +115,7 @@ void WorkoutManager::loadWorkouts() {
 
     // File check.
     if (!ifstr) {
-        throw "Can't read from file " + filename; // -- NO CATCH! --
+        throw std::runtime_error("Can't read from file " + filename); // -- NO CATCH! --
     }
 
     
@@ -279,6 +279,11 @@ void WorkoutManager::updateGraphs(const bool state) {
     detachGraphs();
 
     if (state) {
+
+        if (loadedWorkouts.empty()) {
+            // This isn't handled yet, since Windows is difficult (Structured Exception Handling)...
+            throw std::runtime_error("No workouts.");
+        }
         
         // Need to make a selection of workouts to draw graphs from
         // based on what view type the cycleView() function has selected.
@@ -458,5 +463,11 @@ void WorkoutManager::cycleView() {
             break;
 
     }
+
+    try {
     updateGraphs(true);
+    }
+    catch(std::runtime_error e) {
+        cout << "Runtime error: " << e.what();
+    }
 }

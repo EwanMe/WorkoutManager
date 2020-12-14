@@ -6,6 +6,7 @@
 #include <string>
 #include <map> // For updateGraphs.
 #include "Workout.h"
+#include <stdexcept>
 
 using namespace std;
 using namespace Graph_lib;

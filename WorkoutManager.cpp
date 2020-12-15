@@ -440,9 +440,8 @@ void WorkoutManager::cycleView() {
 
         case GraphView::last_month:
             viewState = GraphView::last_three_months;
-            fromDate = toDate - date::months(5);
             xAxisLabel.set_label(
-                date::format("%B", fromDate)
+                date::format("%B", toDate - date::months(5))
                 + " - "
                 + date::format("%B", toDate)
             );
@@ -450,9 +449,8 @@ void WorkoutManager::cycleView() {
 
         case GraphView::last_three_months:
             viewState = GraphView::last_six_months;
-            fromDate = toDate - date::months(2);
             xAxisLabel.set_label(
-                date::format("%B", fromDate)
+                date::format("%B", toDate - date::months(2))
                 + " - "
                 + date::format("%B", toDate)
             );

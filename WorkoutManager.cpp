@@ -1,6 +1,7 @@
 #include "WorkoutManager.h"
 #include <utility>
 #include "date.h"
+#include <chrono>
 
 WorkoutManager::WorkoutManager(Point xy, int w, int h, const string& title) 
 : Window{xy, w, h, title},
@@ -291,8 +292,9 @@ void WorkoutManager::updateGraphs(const bool state) {
         // Need to make a selection of workouts to draw graphs from
         // based on what view type the cycleView() function has selected.
         set<Workout> selectedWorkouts;
-        double x_scaler {0};    // Scales x_coord further down the line.
-        scaleXaxis(selectedWorkouts, x_scaler);
+        double x_scaler {0}; // Scales x_coord further down the line.
+        unsigned int days {0}; // Number of days in curren time period.
+        scaleXaxis(selectedWorkouts, x_scaler, days);
 
         int i {0}; // Iterator used to pick new Color for each unique graph.
         for (Workout w : selectedWorkouts) {
@@ -373,14 +375,11 @@ void WorkoutManager::detachGraphs() {
     legend.clear();
 }
 
-void WorkoutManager::scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler) {
+void WorkoutManager::scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler, unsigned int& days) {
     // Reference point to determine last month, last three months etc.
     date::year_month_day last = loadedWorkouts.rbegin()->getDate();
     int lastMonth = stoi(date::format("%m", last.month()));
     int lastYear = stoi(date::format("%y", last.year()));
-
-    
-    bool firstIt {true}; // Used for setting x_scaler only on first iteration.
 
     // Search through all loaded workouts, selcting the specified ones.
     for (Workout w : loadedWorkouts) {
@@ -396,7 +395,10 @@ void WorkoutManager::scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler
                     selectedWorkouts.insert(w);
                 }
                 if (!x_scaler) {
-                    x_scaler = (x_length/monthLength);
+                    x_scaler = x_length/monthLength;
+                    auto l = chrono::duration_cast<date::days>(date::months(thisMonth));
+                    auto f = chrono::duration_cast<date::days>(date::months(thisMonth-1));
+                    days = l.count() - f.count();
                 }
                 break;
 
@@ -407,6 +409,11 @@ void WorkoutManager::scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler
                 }
                 if (!x_scaler) {
                     x_scaler = (x_length/(monthLength*3));
+                    auto l = chrono::duration_cast<date::days>(date::months(thisMonth));
+                    auto f = chrono::duration_cast<date::days>(date::months(thisMonth-3));
+                    days = l.count() - f.count();
+                    cout << l.count() << " to " << f.count() << ": " << days;
+                    // TODO: Get the number of days from a interval.
                 }
                 break;
 

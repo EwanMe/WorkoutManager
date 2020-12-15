@@ -94,6 +94,6 @@ public:
     void switchPage(); // Switch between form page and graphs page.
     void updateGraphs(const bool state); // State indicates whether graphs should be attached or detached.
     void detachGraphs();
-    void scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler);
+    void scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler, unsigned int& days);
     void cycleView();
 };

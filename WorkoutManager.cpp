@@ -108,6 +108,9 @@ void WorkoutManager::saveWorkout() {
         currentWorkout.clear();
         displayWorkouts(); // Clears field since currentWorkout is now empty.
     }
+    else {
+        currentWorkoutBox.put("Date is not valid!");
+    }
 }
 
 void WorkoutManager::loadWorkouts() {
@@ -296,6 +299,7 @@ void WorkoutManager::updateGraphs(const bool state) {
             // Date indicates location on x axis.
             // Each workout type gets its own graph.
             // Each weight of workout indicates location on y axis.
+            
             double x_coord = graph_x + ((x_scaler) * (stoi(date::format("%d", w.getDate().day())) - 1)); // Subtracts 1 to start at x=0
             const set<ExerciseSet> exs = w.getResults();
             
@@ -391,9 +395,8 @@ void WorkoutManager::scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler
                 if (thisMonth == lastMonth) {
                     selectedWorkouts.insert(w);
                 }
-                if (firstIt) {
+                if (!x_scaler) {
                     x_scaler = (x_length/monthLength);
-                    firstIt = false;
                 }
                 break;
 
@@ -402,9 +405,8 @@ void WorkoutManager::scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler
                 if (thisMonth == lastMonth || thisMonth == lastMonth-1 || thisMonth == lastMonth-2) {
                     selectedWorkouts.insert(w);
                 }
-                if (firstIt) {
+                if (!x_scaler) {
                     x_scaler = (x_length/(monthLength*3));
-                    firstIt = false;
                 }
                 break;
 
@@ -413,9 +415,8 @@ void WorkoutManager::scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler
                 if (thisMonth == lastMonth || thisMonth == lastMonth-1 || thisMonth == lastMonth-2 || thisMonth == lastMonth-3 || thisMonth == lastMonth-4 || thisMonth == lastMonth-5) {
                     selectedWorkouts.insert(w);
                 }
-                if (firstIt) {
+                if (!x_scaler) {
                     x_scaler = (x_length/(monthLength*6));
-                    firstIt = false;
                 }
                 break;
 
@@ -424,9 +425,8 @@ void WorkoutManager::scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler
                 if (thisYear == lastYear) {
                     selectedWorkouts.insert(w);
                 }
-                if (firstIt) {
+                if (!x_scaler) {
                     x_scaler = (x_length/(monthLength*12));
-                    firstIt = false;
                 }
                 break;
         }
@@ -434,27 +434,38 @@ void WorkoutManager::scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler
 }
 
 void WorkoutManager::cycleView() {
-    
+    date::month toDate = loadedWorkouts.rbegin()->getDate().month();
+    date::month fromDate;
     switch (viewState) {
 
         case GraphView::last_month:
             viewState = GraphView::last_three_months;
-            xAxisLabel.set_label("Last three months");
+            fromDate = toDate - date::months(5);
+            xAxisLabel.set_label(
+                date::format("%B", fromDate)
+                + " - "
+                + date::format("%B", toDate)
+            );
             break;
 
         case GraphView::last_three_months:
             viewState = GraphView::last_six_months;
-            xAxisLabel.set_label("Last six months");
+            fromDate = toDate - date::months(2);
+            xAxisLabel.set_label(
+                date::format("%B", fromDate)
+                + " - "
+                + date::format("%B", toDate)
+            );
             break;
 
         case GraphView::last_six_months:
             viewState = GraphView::last_year;
-            xAxisLabel.set_label("Last year");
+            xAxisLabel.set_label(date::format("%Y", loadedWorkouts.rbegin()->getDate().year()));
             break;
 
         case GraphView::last_year:
             viewState = GraphView::last_month;
-            xAxisLabel.set_label(date::format("%B", loadedWorkouts.rbegin()->getDate().month()));
+            xAxisLabel.set_label(date::format("%B", toDate));
             break;
 
         default:

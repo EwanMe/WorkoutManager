@@ -8,6 +8,8 @@ int main() {
     }
     catch(std::runtime_error e) {
         cout << "Runtime error: " << e.what();
+        string s;
+        while (cin >> s) {break;}        
         return -1;
     }
 

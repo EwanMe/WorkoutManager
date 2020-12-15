@@ -371,9 +371,9 @@ void WorkoutManager::detachGraphs() {
 
 void WorkoutManager::scaleXaxis(set<Workout>& selectedWorkouts, double& x_scaler) {
     // Reference point to determine last month, last three months etc.
-    auto last = loadedWorkouts.rbegin()->getDate();
-    auto lastMonth = stoi(date::format("%m", last.month()));
-    auto lastYear = stoi(date::format("%y", last.year()));
+    date::year_month_day last = loadedWorkouts.rbegin()->getDate();
+    int lastMonth = stoi(date::format("%m", last.month()));
+    int lastYear = stoi(date::format("%y", last.year()));
 
     
     bool firstIt {true}; // Used for setting x_scaler only on first iteration.
@@ -454,7 +454,7 @@ void WorkoutManager::cycleView() {
 
         case GraphView::last_year:
             viewState = GraphView::last_month;
-            xAxisLabel.set_label("Last month");
+            xAxisLabel.set_label(date::format("%B", loadedWorkouts.rbegin()->getDate().month()));
             break;
 
         default:
